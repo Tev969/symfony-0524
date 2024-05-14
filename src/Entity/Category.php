@@ -15,17 +15,16 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $smartphone = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $laptop = null;
 
     /**
      * @var Collection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'Category')]
     private Collection $products;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -37,30 +36,7 @@ class Category
         return $this->id;
     }
 
-    public function getSmartphone(): ?string
-    {
-        return $this->smartphone;
-    }
-
-    public function setSmartphone(string $smartphone): static
-    {
-        $this->smartphone = $smartphone;
-
-        return $this;
-    }
-
-    public function getLaptop(): ?string
-    {
-        return $this->laptop;
-    }
-
-    public function setLaptop(string $laptop): static
-    {
-        $this->laptop = $laptop;
-
-        return $this;
-    }
-
+  
     /**
      * @return Collection<int, Product>
      */
@@ -87,6 +63,18 @@ class Category
                 $product->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
