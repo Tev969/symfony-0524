@@ -8,11 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
-class Conference
+ class Conference implements \Stringable
+
+  
+
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+  
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -23,6 +27,11 @@ class Conference
 
     #[ORM\Column]
     private ?bool $isInternational = null;
+
+    public function __toString(): string
+    {
+        return (string) $this->city.' '.$this->year;
+    }
 
     /**
      * @var Collection<int, Comment>

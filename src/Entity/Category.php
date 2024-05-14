@@ -8,15 +8,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-class Category
+class Category implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-
-
+      
     /**
      * @var Collection<int, Product>
      */
@@ -26,9 +24,15 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+    }
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
