@@ -31,6 +31,7 @@ class CommentCrudController extends AbstractCrudController
             ->setDefaultSort(['createdAt' => 'DESC']);
     }
 
+    
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
@@ -46,19 +47,11 @@ class CommentCrudController extends AbstractCrudController
                     ->hideOnIndex();
                 yield TextField::new('photoFilename')
                     ->onlyOnIndex();
-                $createdAt = DateTimeField::new('createdAt')
-                    ->setFormTypeOptions([
-                        'html5' => true,
-                        'years' => range(date('Y'), date('Y') + 5),
-                        'widget' => 'single_text',
-                    ]);
+                yield DateTimeField::new('createdAt')->hideOnForm();
+                 
         
-                if (Crud::PAGE_EDIT === $pageName) {
-                    yield $createdAt->setFormTypeOption('disabled', true);
-                } else {
-                    yield $createdAt;
-                }
-             }
+              
     }
+}
     
 

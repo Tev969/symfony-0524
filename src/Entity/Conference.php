@@ -2,24 +2,29 @@
 
 namespace App\Entity;
 
-use App\Repository\ConferenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Trait\CreatedAtTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ConferenceRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
+
+#[UniqueEntity('slug')]
  class Conference implements \Stringable
 
-  
 
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
   
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255 , unique:true)]
     private ?string $city = null;
 
     #[ORM\Column(length: 4)]
@@ -38,6 +43,9 @@ use Doctrine\ORM\Mapping as ORM;
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'conference', orphanRemoval: true)]
     private Collection $comments;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Slug = null;
 
     public function __construct()
     {
@@ -114,4 +122,25 @@ use Doctrine\ORM\Mapping as ORM;
 
         return $this;
     }
+
+    public function getSlug(): ?string
+    {
+        return $this->Slug;
+    }
+
+    public function setSlug(string $Slug): static
+    {
+        $this->Slug = $Slug;
+
+        return $this;
+    }
+
+    public function computeSlug(SluggerInterface $slugger)
+        {
+            if (!$this->Slug || '-' === $this->Slug) {
+                $this->Slug = (string) $slugger->slug((string) $this)->lower();
+            }
+        }
+   
 }
+
