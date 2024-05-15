@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProductController extends AbstractController
 {
@@ -43,16 +45,20 @@ class ProductController extends AbstractController
             ];
          
          
-        #[Route('/products', name: 'app_product')]
-        public function index(): Response
+        #[Route('/products', name: 'app_products')]
+        public function index(ProductRepository $productRepository): Response
         {
-            return $this->json(self::$products);
-
+            return $this->render('product/index.html.twig', [
+                            'products' => $productRepository->findAll(),
+                        ]);
         }
+    
 
-        #[Route('/products/{id}', name: 'app_product')]
-        public function one(int $id): Response
-        {
-            return $this->json(self::$products[$id] ?? []);
-        }
+        #[Route('/product/{id}', name: 'product')]
+        public function One(Product $product): Response
+            {
+           return $this->render('product/show.html.twig' , [
+            'product' => $product
+           ]);
+            }
     }
